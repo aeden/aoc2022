@@ -17,13 +17,33 @@ fn main() {
 
     println!("In file {}", file_path);
 
+    let mut elves = Vec::new();
+    let mut current = 0;
+
     if let Ok(lines) = read_lines(file_path) {
         for line in lines {
             if let Ok(calories) = line {
-                println!("{calories}");
+                if calories.is_empty() {
+                    elves.push(current);
+                    current = 0;
+                } else {
+                    let parsed: i32 = calories.parse().unwrap();
+                    current += parsed;
+                }
             }
         }
     }
+
+    elves.sort();
+
+    dbg!(&elves);
+
+    let largest = match elves.pop() {
+        Some(x) => x,
+        None => 0,
+    };
+
+    println!("Largest value: {}", largest);
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
