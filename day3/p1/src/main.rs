@@ -35,10 +35,7 @@ fn main() {
 fn priority(left: &str, right: &str, _line_number: i32) -> u128 {
     for cl in left.chars() {
         for cr in right.chars() {
-            if cl == cr {
-                // println!("line {}: {} == {}, add {}", line_number, cl, cr, u128::from(cl) - get_offset(cl));
-                return u128::from(cl) - get_offset(cl);
-            }
+            if cl == cr { return u128::from(cl) - get_offset(cl); }
         }
     }
     panic!("Did not find common item between the two containers");
