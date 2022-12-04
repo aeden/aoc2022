@@ -58,6 +58,6 @@ fn get_offset(c: char) -> u128 {
     } else if c.is_ascii_uppercase() {
         return 38;
     } else {
-        return 0; // TODO: error case
+        panic!("Not an ASCII letter");
     }
 }
