@@ -4,6 +4,10 @@ use std::io::{self, BufRead};
 use std::path::Path;
 use std::str::FromStr;
 
+const ROCK: i16 = 1;
+const PAPER: i16 = 2;
+const SCISSORS: i16 = 3;
+
 #[derive(Debug, Clone)]
 struct ParseError;
 
@@ -18,16 +22,16 @@ impl FromStr for RoundStrategy {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut letters = s.split_whitespace();
         let them = match letters.next().unwrap() {
-            "A" => 1,
-            "B" => 2,
-            "C" => 3,
+            "A" => ROCK,
+            "B" => PAPER,
+            "C" => SCISSORS,
             _ => todo!(),
         };
 
         let us = match letters.next().unwrap() {
-            "X" => 1,
-            "Y" => 2,
-            "Z" => 3,
+            "X" => ROCK,
+            "Y" => PAPER,
+            "Z" => SCISSORS,
             _ => todo!(),
         };
 
@@ -55,28 +59,28 @@ fn main() {
         for line in lines {
             line_count += 1;
             if let Ok(match_strategy) = line {
-                println!("{}", match_strategy);
+                // println!("{}", match_strategy);
                 let rs = match RoundStrategy::from_str(&match_strategy) {
                     Ok(rs) => rs,
                     Err(_) => todo!(),
                 };
 
-                if (rs.them == 1 && rs.us == 3)
-                    || (rs.them == 2 && rs.us == 1)
-                    || (rs.them == 3 && rs.us == 2)
+                if (rs.them == ROCK && rs.us == SCISSORS)
+                    || (rs.them == PAPER && rs.us == ROCK)
+                    || (rs.them == SCISSORS && rs.us == PAPER)
                 {
-                    println!("They won, add {}", rs.us);
+                    // println!("They won, add {}", rs.us);
                 } else if rs.them == rs.us {
-                    println!("Tie, add {}", rs.us + 3);
+                    // println!("Tie, add {}", rs.us + 3);
                     total += 3;
                 } else {
-                    println!("We won, add {}", rs.us + 6);
+                    // println!("We won, add {}", rs.us + 6);
                     total += 6
                 }
 
                 total += rs.us;
 
-                println!("Running total: {total}");
+                // println!("Running total: {total}");
             }
         }
         println!("Processed {line_count} lines");
