@@ -4,6 +4,14 @@ use std::io::{self, BufRead};
 use std::path::Path;
 use std::str::FromStr;
 
+const ROCK: i16 = 1;
+const PAPER: i16 = 2;
+const SCISSORS: i16 = 3;
+
+const WIN: i16 = 1;
+const TIE: i16 = 2;
+const LOSE: i16 = 3;
+
 #[derive(Debug, Clone)]
 struct ParseError;
 
@@ -18,16 +26,16 @@ impl FromStr for RoundStrategy {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut letters = s.split_whitespace();
         let them = match letters.next().unwrap() {
-            "A" => 1,
-            "B" => 2,
-            "C" => 3,
+            "A" => ROCK,
+            "B" => PAPER,
+            "C" => SCISSORS,
             _ => todo!(),
         };
 
         let end = match letters.next().unwrap() {
-            "X" => 1,
-            "Y" => 2,
-            "Z" => 3,
+            "X" => WIN,
+            "Y" => TIE,
+            "Z" => LOSE,
             _ => todo!(),
         };
 
@@ -55,37 +63,37 @@ fn main() {
         for line in lines {
             line_count += 1;
             if let Ok(match_strategy) = line {
-                println!("{}", match_strategy);
+                // println!("{}", match_strategy);
                 let rs = match RoundStrategy::from_str(&match_strategy) {
                     Ok(rs) => rs,
                     Err(_) => todo!(),
                 };
 
-                if rs.end == 1 {
-                    println!("They they need to win");
-                    if rs.them == 1 {
-                        total += 3;
-                    } else if rs.them == 2 {
-                        total += 1;
+                if rs.end == WIN {
+                    // println!("They they need to win");
+                    if rs.them == ROCK {
+                        total += SCISSORS;
+                    } else if rs.them == PAPER {
+                        total += ROCK;
                     } else {
-                        total += 2;
+                        total += PAPER;
                     }
-                } else if rs.end == 2 {
-                    println!("Tie");
+                } else if rs.end == TIE {
+                    // println!("Tie");
                     total += rs.them + 3;
                 } else {
-                    println!("We need to win");
-                    if rs.them == 1 {
-                        total += 2;
-                    } else if rs.them == 2 {
-                        total += 3;
+                    // println!("We need to win");
+                    if rs.them == ROCK {
+                        total += PAPER;
+                    } else if rs.them == PAPER {
+                        total += SCISSORS;
                     } else {
-                        total += 1;
+                        total += ROCK;
                     }
                     total += 6;
                 }
 
-                println!("Running total: {total}");
+                // println!("Running total: {total}");
             }
         }
         println!("Processed {line_count} lines");
