@@ -2,7 +2,6 @@ use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
-use std::str::Chars;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -25,7 +24,7 @@ fn main() {
             line_count += 1;
             if let Ok(contents) = line {
                 let (left, right) = contents.split_at(contents.len() / 2);
-                total += check(left, right, line_count);
+                total += priority(left, right, line_count);
             }
         }
         println!("Processed {line_count} lines");
@@ -33,11 +32,11 @@ fn main() {
     }
 }
 
-fn check(left: &str, right: &str, line_number: i32) -> u128 {
+fn priority(left: &str, right: &str, _line_number: i32) -> u128 {
     for cl in left.chars() {
         for cr in right.chars() {
             if cl == cr {
-                println!("line {}: {} == {}, add {}", line_number, cl, cr, u128::from(cl) - get_offset(cl));
+                // println!("line {}: {} == {}, add {}", line_number, cl, cr, u128::from(cl) - get_offset(cl));
                 return u128::from(cl) - get_offset(cl);
             }
         }
